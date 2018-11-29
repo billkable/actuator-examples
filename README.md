@@ -26,3 +26,7 @@ See the following for more information:
 -   [Implementing custom endpoints](https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html#production-ready-endpoints-custom)
 
 -   [Example code for adding a custom endpoint](./actuator-custom-endpoint)
+
+## Enabling Pivotal Cloud Foundry Spring Boot to PAS Console integration
+
+-   [Configuring Spring Boot Actuator Endpoints for Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/spring-boot-actuators.html)
