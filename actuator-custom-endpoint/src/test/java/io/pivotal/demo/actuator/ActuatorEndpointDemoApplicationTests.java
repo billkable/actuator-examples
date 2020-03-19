@@ -1,24 +1,20 @@
 package io.pivotal.demo.actuator;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
-@RunWith(SpringRunner.class)
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ActuatorEndpointDemoApplicationTests {
     private final static String COMMAND_EVENT = "Command executed";
@@ -36,25 +32,22 @@ public class ActuatorEndpointDemoApplicationTests {
 
         postParams.put("eventName", COMMAND_EVENT);
 
-        ResponseEntity responseEntity =
+        ResponseEntity<Object> responseEntity =
                 restTemplate.exchange(
                         RequestEntity.post(URI.create(ACTUATOR_NEW_BACKING_RESOURCE))
                                 .body(postParams),
                         Object.class);
 
-        Assert.assertEquals(HttpStatus.NO_CONTENT,
-                responseEntity.getStatusCode());
+        assertThat(responseEntity.getStatusCode().equals(HttpStatus.NO_CONTENT));
 
-        Assert.assertEquals(1,endpoint.getEvents().size());
-
+        assertThat(endpoint.getEvents().size() == 1);
     }
 
     @Test
     public void testReadEndpointViaHttp() {
-        Assert.assertEquals(COMMAND_EVENT,
-                            (String)restTemplate.getForEntity(
-                                        ACTUATOR_NEW_BACKING_RESOURCE,
-                                        ArrayList.class)
-                                    .getBody().get(0));
+        assertThat(Objects.requireNonNull(
+                restTemplate.getForEntity(ACTUATOR_NEW_BACKING_RESOURCE, String[].class)
+                        .getBody())[0]
+                .equals(COMMAND_EVENT));
     }
 }

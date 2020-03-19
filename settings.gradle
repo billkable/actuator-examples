@@ -1,0 +1,3 @@
+rootProject.name = 'actuator'
+include(':actuator-health')
+include(':actuator-custom-endpoint')
